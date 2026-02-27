@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField]private float duration = 30f;
+    [SerializeField]private float duration = 31f;
     private float timeRemaining = 0f;
     private TMPro.TextMeshPro textMeshPro;
-    private bool bIsFinished = false;
+    private bool bIsFinished = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,7 +18,7 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (bIsFinished == true) return;
+        if (bIsFinished) return;
 
         timeRemaining -= Time.deltaTime;
 
@@ -28,12 +28,25 @@ public class Timer : MonoBehaviour
             bIsFinished = true;
         }
 
-        UpdateText();
+        if (!bIsFinished) UpdateText();
+    }
+
+    public void StartTimer()
+    {
+        if (!bIsFinished) return;
+
+        bIsFinished = false;
+
+        timeRemaining = duration;
+
+        int timeToShow = (int)duration;
+        textMeshPro.text = timeToShow.ToString();
     }
 
     private void TimeOut()
     {
         Debug.Log("TIME OUT!");
+        textMeshPro.text = "XXX";
     }
 
     private void UpdateText()
