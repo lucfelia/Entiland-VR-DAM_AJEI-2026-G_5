@@ -9,8 +9,15 @@ namespace Autohand.Demo{
         public float speed = 2;
         public float movementX;
         public float movementY;
+        public bool isGameStarted =false;
         
         void Update(){
+            if (!isGameStarted)
+            {
+                Debug.Log("NO");
+                return;
+            }
+            Debug.Log("YES");
             var axis = GetValue();
             movementX= axis.x * Time.deltaTime * speed;
             movementY= axis.y * Time.deltaTime * speed;
