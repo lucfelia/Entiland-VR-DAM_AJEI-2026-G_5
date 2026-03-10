@@ -711,6 +711,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135176665}
   m_Mesh: {fileID: -8678823145569952518, guid: ce4ee5ad8d0414948927c67349bafdd4, type: 3}
+--- !u!1 &163653336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 163653338}
+  - component: {fileID: 163653337}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &163653337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163653336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c050f4b590253740a8a467a1761196c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystcik: {fileID: 2128937300}
+  timer: {fileID: 324267933}
+  InitialPos: {fileID: 609002664}
+--- !u!4 &163653338
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163653336}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9673019, y: -7.3905315, z: -31.497368}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &165453916
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4969,8 +5016,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d97e49919b5bc42b9bd2f05722fc4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameLoopManager: {fileID: 163653337}
   duration: 31
   bIsFinished: 1
+  RestartGame: 1
 --- !u!1 &396324635
 GameObject:
   m_ObjectHideFlags: 0
@@ -21615,6 +21664,37 @@ Transform:
   - {fileID: 135176666}
   m_Father: {fileID: 1601090524}
   m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
+--- !u!1 &609002664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 609002665}
+  m_Layer: 0
+  m_Name: StartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &609002665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609002664}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.14114699, y: 0.14212972, z: -0.68459105, w: -0.70086503}
+  m_LocalPosition: {x: 0.18408754, y: 3.1978, z: 8.963994}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1760253801}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &637874458
 GameObject:
   m_ObjectHideFlags: 0
@@ -24649,7 +24729,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 324267933}
-        m_TargetAssemblyTypeName: Timer, Assembly-CSharp
+        m_TargetAssemblyTypeName: Autohand.Demo.Timer, Assembly-CSharp
         m_MethodName: StartTimer
         m_Mode: 1
         m_Arguments:
@@ -26825,6 +26905,7 @@ Transform:
   - {fileID: 1932971809}
   - {fileID: 87604814}
   - {fileID: 1663242569}
+  - {fileID: 609002665}
   - {fileID: 165453917}
   m_Father: {fileID: 1632126133}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -29013,3 +29094,4 @@ SceneRoots:
   - {fileID: 396558917}
   - {fileID: 1254388720}
   - {fileID: 324267932}
+  - {fileID: 163653338}

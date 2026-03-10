@@ -5,18 +5,16 @@ namespace Autohand.Demo
 { 
     public class GameLoopManager : MonoBehaviour
     {
-        public static GameLoopManager Instance { get; private set; }
 
         public JoystickObjectMover joystcik;
         public Timer timer;
         public GameObject InitialPos;
-        public GameObject Hook;
 
         private void Update()
         {
-            if (Hook.transform.position != InitialPos.transform.position) return;
-            if(timer.bIsFinished) return;
-            timer.bIsFinished = true;
+            if (joystcik.move.localPosition != InitialPos.transform.position) return;
+            //if(timer.bIsFinished) return;
+            //timer.RestartGame = true;
         }
 
         public void StartMovement()
@@ -26,7 +24,9 @@ namespace Autohand.Demo
         public void EndGame()
         {
             joystcik.isGameStarted = false;
-            Hook.transform.position = InitialPos.transform.position;
+            joystcik.move.localPosition = InitialPos.transform.localPosition;
+            timer.RestartGame = true;
+
         }
     }
 }

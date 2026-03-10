@@ -12,7 +12,12 @@ namespace Autohand.Demo{
         public bool isGameStarted =false;
         
         void Update(){
-            if(!isGameStarted)return;
+            if (!isGameStarted)
+            {
+                Debug.Log("NO");
+                return;
+            }
+            Debug.Log("YES");
             var axis = GetValue();
             movementX= axis.x * Time.deltaTime * speed;
             movementY= axis.y * Time.deltaTime * speed;

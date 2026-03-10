@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditorInternal.VersionControl;
 using UnityEngine;
 
 namespace Autohand.Demo
@@ -6,11 +7,13 @@ namespace Autohand.Demo
 
     public class Timer : MonoBehaviour
     {
+        public GameLoopManager gameLoopManager;
+
         [SerializeField] private float duration = 31f;
         private float timeRemaining = 0f;
         private TMPro.TextMeshPro textMeshPro;
         public bool bIsFinished = true;
-
+        public bool RestartGame =true;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -28,6 +31,7 @@ namespace Autohand.Demo
             if (timeRemaining < 0f)
             {
                 TimeOut();
+                bIsFinished = true;
             }
 
             if (!bIsFinished) UpdateText();
@@ -35,22 +39,22 @@ namespace Autohand.Demo
 
         public void StartTimer()
         {
-            if (!bIsFinished) return;
-
+            if (!RestartGame) return;
+            RestartGame = false;
             bIsFinished = false;
 
             timeRemaining = duration;
 
             int timeToShow = (int)duration;
             textMeshPro.text = timeToShow.ToString();
-            GameLoopManager.Instance.StartMovement();
+            gameLoopManager.StartMovement();
         }
 
         private void TimeOut()
         {
             Debug.Log("TIME OUT!");
             textMeshPro.text = "XXX";
-            GameLoopManager.Instance.EndGame();
+            gameLoopManager.EndGame();
         }
 
         private void UpdateText()
