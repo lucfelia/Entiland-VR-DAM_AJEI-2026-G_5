@@ -6,16 +6,15 @@ public class HookDown : MonoBehaviour
     public bool isGrabbing =false;
     public GameObject startPoint;
     public GameObject downpoint;
-    public GameObject whenUp;
-    Vector3 positionToDown;
 
     [SerializeField] private float DownUpTime= 3f;
     [SerializeField] private float BackTime = 3f;
     [SerializeField] private float GrabTime= 3f;
 
     private float timer;
-    
-  public enum HookState
+    private Vector3 positionToDown;
+
+    public enum HookState
     {
         None = 0,   
         Down=1,
@@ -26,14 +25,6 @@ public class HookDown : MonoBehaviour
         UnGrab=6
     }
     private HookState hookState;
-
-    void Start()
-    {
-        positionToDown = transform.localPosition;
-        hookState = HookState.Down;
-        Debug.Log("ChangeToDown");
-
-    }
     private void Update()
     {
         switch (hookState)
@@ -189,6 +180,6 @@ public class HookDown : MonoBehaviour
     {
         isGrabbing = true;
         hookState= HookState.Down;
-        whenUp = gameObject;
+        positionToDown = transform.localPosition;
     }
 }

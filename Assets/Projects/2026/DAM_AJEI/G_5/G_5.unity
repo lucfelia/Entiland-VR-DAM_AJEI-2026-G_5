@@ -24771,13 +24771,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Autohand.Demo.Timer, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1743333232}
+        m_TargetAssemblyTypeName: HookDown, Assembly-CSharp
+        m_MethodName: StartGrabbing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -26900,7 +26900,6 @@ MonoBehaviour:
   isGrabbing: 0
   startPoint: {fileID: 609002664}
   downpoint: {fileID: 716079202}
-  whenUp: {fileID: 0}
   DownUpTime: 3
   BackTime: 3
   GrabTime: 3
