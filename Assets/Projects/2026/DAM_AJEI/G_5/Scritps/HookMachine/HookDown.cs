@@ -217,6 +217,8 @@ public class HookDown : MonoBehaviour
     }
     public void StartGrabbing()
     {
-
+        isGrabbing = true;
+        hookState = HookState.Down;
+        positionToDown = transform.localPosition;
     }
 }
