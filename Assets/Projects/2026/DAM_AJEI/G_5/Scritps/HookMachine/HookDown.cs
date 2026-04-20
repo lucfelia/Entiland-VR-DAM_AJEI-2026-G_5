@@ -7,7 +7,10 @@ public class HookDown : MonoBehaviour
     public GameObject startPoint;
     public GameObject downpoint;
 
-    [SerializeField] private Autohand.Hand autoHand;
+    private Rigidbody rbObjectGrabbed;
+
+    [SerializeField] private GameObject hand;
+    private SkinnedMeshRenderer handMesh;
 
     [SerializeField] private float DownUpTime= 3f;
     [SerializeField] private float BackTime = 3f;
@@ -28,9 +31,19 @@ public class HookDown : MonoBehaviour
         Up=3,
         ReturnBack=4,
         ReturnLeft=5,
-        UnGrab=6
+        UnGrab=6,
+        Close = 7
     }
     private HookState hookState;
+
+    void Start()
+    {
+                    handMesh = hand.GetComponentInChildren<SkinnedMeshRenderer>();
+
+        isGrabbing = true;
+        hookState = HookState.Down;
+        positionToDown = transform.localPosition;
+    }
     private void Update()
     {
         switch (hookState)
@@ -55,6 +68,9 @@ public class HookDown : MonoBehaviour
             case HookState.UnGrab:
                 Ungrab();
                 return;
+            case HookState.Close:
+                Closing();
+                return;
             default:
                 return;
         }
@@ -65,6 +81,7 @@ public class HookDown : MonoBehaviour
         {
             timer += Time.deltaTime;
             float t = timer / DownUpTime;
+            handMesh.SetBlendShapeWeight(0, Mathf.Lerp(0, 100, timer / GrabTime));
 
             float newY = Mathf.Lerp(
                  positionToDown.y,
@@ -76,11 +93,12 @@ public class HookDown : MonoBehaviour
                 newY,
                 transform.localPosition.z
             );
+
         }
         else
         {
             hookState = HookState.Grab;
-            timer = 0;
+            timer = 0;            
         }
     }
     private void Grab()
@@ -88,32 +106,27 @@ public class HookDown : MonoBehaviour
         if (timer < GrabTime)
         {
             timer += Time.deltaTime;
+            handMesh.SetBlendShapeWeight(0, Mathf.Lerp(100, 0, timer / GrabTime));
         }
         else
         {
-            Autohand.Grabbable grabbable = null;
-            RaycastHit finalHit = default;
-
             for (int i = 0; i < raycastPoints.Length; i++)
             {
                 Debug.DrawRay(raycastPoints[i].position, Vector3.down * grabRadius, Color.red, 3f);
 
                 if (Physics.Raycast(raycastPoints[i].position, Vector3.down, out RaycastHit hit, grabRadius, grabbableLayer))
                 {
-                    if (hit.transform.TryGetComponent(out Autohand.Grabbable g))
-                    {
-                        grabbable = g;
-                        finalHit = hit;
-                        break;
-                    }
-
+                    grabbedObject = hit.transform;
+                    Transform children = grabbedObject.Find("Bone.006");
+                    Rigidbody rbChildren = children.GetComponent<Rigidbody>();
+                    rbChildren.isKinematic = true;
+                    rbObjectGrabbed = grabbedObject.GetComponent<Rigidbody>();
+                    rbObjectGrabbed.isKinematic = true;
+                    grabbedObject.SetParent(hand.transform);
+                    break;
                 }
+            }
 
-            }
-            if (grabbable != null)
-            {
-                autoHand.CreateGrabConnection(grabbable);
-            }
             timer = 0;
             hookState = HookState.Up;
         }
@@ -198,15 +211,35 @@ public class HookDown : MonoBehaviour
         if (timer < GrabTime)
         {
             timer += Time.deltaTime;
+            handMesh.SetBlendShapeWeight(0, Mathf.Lerp(0, 100, timer / GrabTime));
         }
         else
         {
-            if (autoHand.holdingObj != null)
+            if (grabbedObject != null)
             {
-                autoHand.Release();
+                Transform children = grabbedObject.Find("Bone.006");
+                Rigidbody rbChildren = children.GetComponent<Rigidbody>();
+                rbChildren.isKinematic = false;
+                grabbedObject.SetParent(grabbedObject);
+                rbObjectGrabbed.isKinematic = false;
+                grabbedObject = null;
+                rbObjectGrabbed = null;
             }
 
             timer = 0;
+            hookState = HookState.None;
+        }
+    }
+    private void Closing()
+    {
+        if (timer < GrabTime)
+        {
+            timer += Time.deltaTime;
+            handMesh.SetBlendShapeWeight(0, Mathf.Lerp(100, 0, timer / GrabTime));
+        }
+        else
+        {
+            timer=0;
             hookState = HookState.None;
         }
     }
