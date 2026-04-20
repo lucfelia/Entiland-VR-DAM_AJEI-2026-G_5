@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 
@@ -7,7 +8,10 @@ public class HookDown : MonoBehaviour
     public GameObject startPoint;
     public GameObject downpoint;
 
-    [SerializeField] private Autohand.Hand autoHand;
+    [SerializeField] private Transform hand;
+    [SerializeField] private Transform middlePos;
+
+    private Transform grabbedObject;
 
     [SerializeField] private float DownUpTime= 3f;
     [SerializeField] private float BackTime = 3f;
@@ -15,11 +19,18 @@ public class HookDown : MonoBehaviour
 
     [SerializeField] private float grabRadius = 1f;
     [SerializeField] private LayerMask grabbableLayer;
-    private Transform grabbedObject;
     [SerializeField] private Transform[] raycastPoints = new Transform[4];
+    private Rigidbody grabbedObjectRb;
 
     private float timer;
     private Vector3 positionToDown;
+
+    void Start()
+    {
+        isGrabbing = true;
+        hookState = HookState.Down;
+        positionToDown = transform.localPosition;
+    }
     public enum HookState
     {
         None = 0,   
@@ -91,29 +102,21 @@ public class HookDown : MonoBehaviour
         }
         else
         {
-            Autohand.Grabbable grabbable = null;
-            RaycastHit finalHit = default;
-
             for (int i = 0; i < raycastPoints.Length; i++)
             {
                 Debug.DrawRay(raycastPoints[i].position, Vector3.down * grabRadius, Color.red, 3f);
 
                 if (Physics.Raycast(raycastPoints[i].position, Vector3.down, out RaycastHit hit, grabRadius, grabbableLayer))
                 {
-                    if (hit.transform.TryGetComponent(out Autohand.Grabbable g))
-                    {
-                        grabbable = g;
-                        finalHit = hit;
-                        break;
-                    }
-
+                    grabbedObject = hit.transform;
+                    grabbedObject.SetParent(hand);
+                    grabbedObjectRb = grabbedObject.GetComponent<Rigidbody>();
+                    grabbedObjectRb.isKinematic = true;
+                    grabbedObject.localPosition = middlePos.localPosition;
+                    break;
                 }
+            }
 
-            }
-            if (grabbable != null)
-            {
-                autoHand.CreateGrabConnection(grabbable);
-            }
             timer = 0;
             hookState = HookState.Up;
         }
@@ -201,9 +204,11 @@ public class HookDown : MonoBehaviour
         }
         else
         {
-            if (autoHand.holdingObj != null)
+            if (grabbedObject != null)
             {
-                autoHand.Release();
+                grabbedObject.SetParent(null);
+                grabbedObject = null;
+                grabbedObjectRb.isKinematic = false;
             }
 
             timer = 0;
@@ -212,8 +217,6 @@ public class HookDown : MonoBehaviour
     }
     public void StartGrabbing()
     {
-        isGrabbing = true;
-        hookState= HookState.Down;
-        positionToDown = transform.localPosition;
+
     }
 }
