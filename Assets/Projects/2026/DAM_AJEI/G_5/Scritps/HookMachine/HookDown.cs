@@ -38,8 +38,7 @@ public class HookDown : MonoBehaviour
 
     void Start()
     {
-                    handMesh = hand.GetComponentInChildren<SkinnedMeshRenderer>();
-
+        handMesh = hand.GetComponentInChildren<SkinnedMeshRenderer>();
         isGrabbing = true;
         hookState = HookState.Down;
         positionToDown = transform.localPosition;
@@ -117,12 +116,15 @@ public class HookDown : MonoBehaviour
                 if (Physics.Raycast(raycastPoints[i].position, Vector3.down, out RaycastHit hit, grabRadius, grabbableLayer))
                 {
                     grabbedObject = hit.transform;
-                    Transform children = grabbedObject.Find("Bone.006");
-                    Rigidbody rbChildren = children.GetComponent<Rigidbody>();
-                    rbChildren.isKinematic = true;
+
+                    foreach (Rigidbody rb in grabbedObject.GetComponentsInChildren<Rigidbody>())
+                    {
+                        rb.isKinematic = true;
+                    }
+
                     rbObjectGrabbed = grabbedObject.GetComponent<Rigidbody>();
-                    rbObjectGrabbed.isKinematic = true;
                     grabbedObject.SetParent(hand.transform);
+                    Debug.Log("Objeto agarrado: " + grabbedObject.name);
                     break;
                 }
             }
@@ -217,11 +219,13 @@ public class HookDown : MonoBehaviour
         {
             if (grabbedObject != null)
             {
-                Transform children = grabbedObject.Find("Bone.006");
-                Rigidbody rbChildren = children.GetComponent<Rigidbody>();
-                rbChildren.isKinematic = false;
-                grabbedObject.SetParent(grabbedObject);
-                rbObjectGrabbed.isKinematic = false;
+                grabbedObject.SetParent(null);
+
+                foreach (Rigidbody rb in grabbedObject.GetComponentsInChildren<Rigidbody>())
+                {
+                    rb.isKinematic = false;
+                }
+
                 grabbedObject = null;
                 rbObjectGrabbed = null;
             }
