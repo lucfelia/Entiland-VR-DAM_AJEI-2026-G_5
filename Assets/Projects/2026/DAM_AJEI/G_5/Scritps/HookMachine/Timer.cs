@@ -5,9 +5,8 @@ using UnityEngine;
 namespace Autohand.Demo
 {
 
-    public class Timer : MonoBehaviour
+    public class TimerGame : MonoBehaviour
     {
-        public GameLoopManager gameLoopManager;
 
         [SerializeField] private float duration = 31f;
         private float timeRemaining = 0f;
@@ -47,14 +46,17 @@ namespace Autohand.Demo
 
             int timeToShow = (int)duration;
             textMeshPro.text = timeToShow.ToString();
-            gameLoopManager.StartMovement();
+            GameLoopManager.instance.StartMovement();
+            SoundManager.instance.PlayMusic();
         }
 
-        private void TimeOut()
+        public void TimeOut()
         {
             Debug.Log("TIME OUT!");
             textMeshPro.text = "XXX";
-            gameLoopManager.EndGame();
+            if(HookDown.instance.hookState == HookDown.HookState.None)
+                HookDown.instance.hookState = HookDown.HookState.ReturnBack;
+            GameLoopManager.instance.EndGame();
         }
 
         private void UpdateText()

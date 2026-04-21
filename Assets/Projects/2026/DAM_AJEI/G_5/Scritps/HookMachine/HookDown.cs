@@ -6,12 +6,15 @@ using UnityEngine.Animations;
 
 public class HookDown : MonoBehaviour
 {
+    public static HookDown instance { get; private set; }
+
     public bool isGrabbing =false;
     public GameObject startPoint;
     public GameObject downpoint;
 
     private Rigidbody rbObjectGrabbed;
 
+    public TimerGame timerGrab;
     [SerializeField] private GameObject hand;
     [SerializeField] private Transform positionToTp;
 
@@ -40,8 +43,15 @@ public class HookDown : MonoBehaviour
         UnGrab=6,
         Close = 7
     }
-    private HookState hookState;
+    public HookState hookState;
 
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+    }
     void Start()
     {
         handMesh = hand.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -240,7 +250,10 @@ public class HookDown : MonoBehaviour
                 grabbedObject = null;
                 rbObjectGrabbed = null;
             }
-
+            if(timerGrab.bIsFinished)
+            {
+                timerGrab.TimeOut();
+            }
             timer = 0;
             hookState = HookState.None;
         }
@@ -260,10 +273,11 @@ public class HookDown : MonoBehaviour
     }
     public void StartGrabbing()
     {
+        if (GameLoopManager.instance.isGameStarted && hookState == HookState.None) return;
         isGrabbing = true;
-        hookState= HookState.Down;
+        hookState = HookState.Down;
         positionToDown = transform.localPosition;
+        GameLoopManager.instance.ResetMoving();
         SoundManager.instance.PlayMove();
-
     }
 }

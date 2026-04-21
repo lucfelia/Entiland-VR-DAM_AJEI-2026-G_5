@@ -10,8 +10,10 @@ namespace Autohand.Demo
         [Header("Mixer Groups")]
         public AudioMixerGroup musicGroup;
         public AudioMixerGroup sfxGroup;
+        public AudioMixerGroup ambientalGroup;
 
         [Header("Sources")]
+        public AudioSource ambiental;
         public AudioSource musicSource;
         public AudioSource sfxSource;
 
@@ -22,7 +24,8 @@ namespace Autohand.Demo
             Music,
             Grab,
             Release,
-            Move
+            Move, 
+            Ambiental
         }
 
         void Awake()
@@ -34,13 +37,17 @@ namespace Autohand.Demo
 
             musicSource.outputAudioMixerGroup = musicGroup;
             sfxSource.outputAudioMixerGroup = sfxGroup;
+            ambiental.outputAudioMixerGroup = ambientalGroup;
+
         }
 
         void Start()
         {
             musicSource.clip = audioClips[(int)SoundEffects.Music];
             musicSource.loop = true;
-            musicSource.Play();
+            ambiental.clip = audioClips[(int)SoundEffects.Ambiental];
+            ambiental.loop = true;
+            ambiental.Play();
         }
 
         public void PlayGrab()
@@ -56,7 +63,16 @@ namespace Autohand.Demo
             sfxSource.loop = true;
             sfxSource.Play();
         }
-
+        public void StopMove()
+        {
+            if (sfxSource.clip == audioClips[(int)SoundEffects.Move])
+                sfxSource.Stop();
+        }
+        public void PlayMusic()
+        {
+            if (!musicSource.isPlaying)
+                musicSource.Play();
+        }
         public void PlayRelease()
         {
             sfxSource.Stop();
