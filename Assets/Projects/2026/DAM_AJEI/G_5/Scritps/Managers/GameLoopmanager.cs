@@ -7,7 +7,7 @@ namespace Autohand.Demo
     {
         public static GameLoopManager instance { get; private set; }
 
-        public JoystickObjectMover joystcik;
+        public JoystickObjectMover2 joystcik;
         public bool isGameStarted = false;
         public TimerGame timer;
         public GameObject InitialPos;
@@ -47,8 +47,6 @@ namespace Autohand.Demo
         public void EndGame()
         {
             isGameStarted = false;
-            joystcik.isGameStarted = isGameStarted;
-            joystcik.move.localPosition = InitialPos.transform.localPosition;
             timer.RestartGame = true;
 
         }

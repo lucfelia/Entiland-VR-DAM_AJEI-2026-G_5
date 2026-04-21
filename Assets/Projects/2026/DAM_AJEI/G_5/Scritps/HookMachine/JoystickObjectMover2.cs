@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Autohand.Demo{
-    public class JoystickObjectMover2 : PhysicsGadgetJoystick
+    public class JoystickObjectMover : PhysicsGadgetJoystick
     {
         public Transform move;
         public float speed = 2;

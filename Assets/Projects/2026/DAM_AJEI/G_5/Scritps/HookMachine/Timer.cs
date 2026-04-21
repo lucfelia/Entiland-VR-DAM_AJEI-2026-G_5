@@ -52,10 +52,12 @@ namespace Autohand.Demo
 
         public void TimeOut()
         {
+            Debug.Log("Finished");
             Debug.Log("TIME OUT!");
             textMeshPro.text = "XXX";
-            if(HookDown.instance.hookState == HookDown.HookState.None)
+            if(HookDown.instance.hookState == HookDown.HookState.None && timeRemaining>0)
                 HookDown.instance.hookState = HookDown.HookState.ReturnBack;
+            timeRemaining = 0f;
             GameLoopManager.instance.EndGame();
         }
 

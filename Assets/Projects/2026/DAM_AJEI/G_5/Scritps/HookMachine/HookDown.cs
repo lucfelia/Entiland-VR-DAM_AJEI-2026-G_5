@@ -144,6 +144,10 @@ public class HookDown : MonoBehaviour
                     Debug.Log("Objeto agarrado: " + grabbedObject.name);
                     break;
                 }
+                else
+                {
+                    Debug.Log("Objeto no Detectado");
+                }
             }
 
             timer = 0;
@@ -246,10 +250,7 @@ public class HookDown : MonoBehaviour
                 grabbedObject = null;
                 rbObjectGrabbed = null;
             }
-            if(timerGrab.bIsFinished)
-            {
-                timerGrab.TimeOut();
-            }
+
             timer = 0;
             hookState = HookState.None;
         }
@@ -264,17 +265,23 @@ public class HookDown : MonoBehaviour
         else
         {
             timer=0;
+            timerGrab.TimeOut();
             hookState = HookState.None;
         }
     }
     public void StartGrabbing()
     {
-        if (GameLoopManager.instance.isGameStarted && hookState == HookState.None) return;
+        if (!GameLoopManager.instance.isGameStarted && hookState != HookState.None)
+        {
+            Debug.Log("Not Works");
+            return;
+        }
         isGrabbing = true;
         hookState = HookState.Down;
         positionToDown = transform.localPosition;
         GameLoopManager.instance.ResetMoving();
         SoundManager.instance.PlayMove();
+        Debug.Log("Works");
 
     }
 }
