@@ -32856,6 +32856,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6190224479228784249, guid: 6ac57db43d528b94e91f5c0723f28ffe, type: 3}
+      propertyPath: m_Name
+      value: Bone.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 6190224479228784249, guid: 6ac57db43d528b94e91f5c0723f28ffe, type: 3}
       propertyPath: m_Layer
       value: 30
       objectReference: {fileID: 0}
