@@ -55,10 +55,6 @@ public class HookDown : MonoBehaviour
     void Start()
     {
         handMesh = hand.GetComponentInChildren<SkinnedMeshRenderer>();
-        isGrabbing = true;
-        hookState = HookState.Down;
-        positionToDown = transform.localPosition;
-        SoundManager.instance.PlayMove();
     }
     private void Update()
     {
@@ -279,5 +275,6 @@ public class HookDown : MonoBehaviour
         positionToDown = transform.localPosition;
         GameLoopManager.instance.ResetMoving();
         SoundManager.instance.PlayMove();
+
     }
 }
