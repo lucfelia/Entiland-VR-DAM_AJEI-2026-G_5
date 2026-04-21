@@ -1,5 +1,8 @@
 using System.Threading;
+using Autohand.Demo;
 using UnityEngine;
+using UnityEngine.Animations;
+
 
 public class HookDown : MonoBehaviour
 {
@@ -10,6 +13,9 @@ public class HookDown : MonoBehaviour
     private Rigidbody rbObjectGrabbed;
 
     [SerializeField] private GameObject hand;
+    [SerializeField] private Transform positionToTp;
+
+
     private SkinnedMeshRenderer handMesh;
 
     [SerializeField] private float DownUpTime= 3f;
@@ -42,6 +48,7 @@ public class HookDown : MonoBehaviour
         isGrabbing = true;
         hookState = HookState.Down;
         positionToDown = transform.localPosition;
+        SoundManager.instance.PlayMove();
     }
     private void Update()
     {
@@ -97,7 +104,8 @@ public class HookDown : MonoBehaviour
         else
         {
             hookState = HookState.Grab;
-            timer = 0;            
+            timer = 0;
+            SoundManager.instance.PlayGrab();
         }
     }
     private void Grab()
@@ -116,14 +124,17 @@ public class HookDown : MonoBehaviour
                 if (Physics.Raycast(raycastPoints[i].position, Vector3.down, out RaycastHit hit, grabRadius, grabbableLayer))
                 {
                     grabbedObject = hit.transform;
-
-                    foreach (Rigidbody rb in grabbedObject.GetComponentsInChildren<Rigidbody>())
-                    {
-                        rb.isKinematic = true;
-                    }
+                    Transform head = grabbedObject.Find("Bone.006");
 
                     rbObjectGrabbed = grabbedObject.GetComponent<Rigidbody>();
-                    grabbedObject.SetParent(hand.transform);
+                    rbObjectGrabbed.isKinematic = true;
+
+                    Rigidbody rbHead = head.GetComponent<Rigidbody>();
+                    rbHead.isKinematic = true;
+
+                    grabbedObject.SetParent(gameObject.transform);
+                    grabbedObject.localPosition = positionToTp.localPosition;
+
                     Debug.Log("Objeto agarrado: " + grabbedObject.name);
                     break;
                 }
@@ -131,6 +142,8 @@ public class HookDown : MonoBehaviour
 
             timer = 0;
             hookState = HookState.Up;
+            SoundManager.instance.PlayMove();
+
         }
     }
     private void MoveUp()
@@ -156,6 +169,7 @@ public class HookDown : MonoBehaviour
         {
             timer = 0;
             hookState = HookState.ReturnBack;
+
         }
     }
     private void ReturnBack()
@@ -206,6 +220,8 @@ public class HookDown : MonoBehaviour
         {
             timer = 0;
             hookState = HookState.UnGrab;
+            SoundManager.instance.PlayRelease();
+
         }
     }
     private void Ungrab()
@@ -220,12 +236,7 @@ public class HookDown : MonoBehaviour
             if (grabbedObject != null)
             {
                 grabbedObject.SetParent(null);
-
-                foreach (Rigidbody rb in grabbedObject.GetComponentsInChildren<Rigidbody>())
-                {
-                    rb.isKinematic = false;
-                }
-
+                rbObjectGrabbed.isKinematic = false;
                 grabbedObject = null;
                 rbObjectGrabbed = null;
             }
@@ -252,5 +263,7 @@ public class HookDown : MonoBehaviour
         isGrabbing = true;
         hookState= HookState.Down;
         positionToDown = transform.localPosition;
+        SoundManager.instance.PlayMove();
+
     }
 }
